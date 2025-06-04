@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct MainMenuView: View {
+    var onStartGame: () -> Void
+    var onShowHistory: () -> Void
     var body: some View {
-            NavigationStack {
                 ZStack {
                     LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.2), Color.purple.opacity(0.2)]),
                                    startPoint: .topLeading,
@@ -29,11 +30,10 @@ struct MainMenuView: View {
                         Spacer()
                         
                         VStack(spacing: 20) {
-                            NavigationLink(destination: PlayerNamesView()) {
+                    Button(action: onStartGame) {
                                 CustomText(title: "Graj", icon: "gamecontroller")
                             }
-                            
-                            NavigationLink(destination: GameHistoryView()) {
+                    Button(action: onShowHistory) {
                                 CustomText(title: "Historia Gier", icon: "clock.arrow.circlepath")
                             }
                         }
@@ -55,9 +55,7 @@ struct MainMenuView: View {
                 }
             }
         }
-}
-
 
 #Preview {
-    MainMenuView()
+    MainMenuView(onStartGame: {}, onShowHistory: {})
 }

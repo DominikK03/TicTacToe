@@ -66,3 +66,17 @@ struct CustomText: View {
         )
     }
 }
+
+// ShakeEffect for shake animation in GameView
+public struct ShakeEffect: GeometryEffect {
+    public var shakes: CGFloat = 3
+    public var animatableData: CGFloat
+    public init(shakes: CGFloat = 3, animatableData: CGFloat) {
+        self.shakes = shakes
+        self.animatableData = animatableData
+    }
+    public func effectValue(size: CGSize) -> ProjectionTransform {
+        ProjectionTransform(CGAffineTransform(translationX:
+            10 * sin(animatableData * .pi * shakes), y: 0))
+    }
+}
