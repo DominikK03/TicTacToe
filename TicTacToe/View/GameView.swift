@@ -16,7 +16,6 @@ struct GameView: View {
     var onBack: () -> Void
     var onRestart: () -> Void
     @StateObject private var viewModel: GameViewModel
-    @State private var showTakenAlert = false
     @State private var shakeTrigger: CGFloat = 0
     
     init(players: [Player], board: Board, game: Game, context: NSManagedObjectContext, onBack: @escaping () -> Void, onRestart: @escaping () -> Void) {
@@ -58,7 +57,7 @@ struct GameView: View {
                     .foregroundColor(.purple)
                     .bold()
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 3), spacing: 15) {
-                    ForEach(0..<9, id: \ .self) { index in
+                    ForEach(0..<9, id: \.self) { index in
                         let row = index / 3
                         let col = index % 3
                         ZStack {
@@ -81,16 +80,18 @@ struct GameView: View {
                                 withAnimation(.default) {
                                     shakeTrigger += 1
                                 }
-                                showTakenAlert = true
                             }
                         }
                     }
                 }
                 .padding(.horizontal, 20)
                 .modifier(ShakeEffect(animatableData: shakeTrigger))
+                .onTapGesture(count: 2) {
+                    onRestart()
+                }
                 if viewModel.gameOver {
                     VStack {
-                        Text(viewModel.winner.isEmpty ? "Remis!" : "Wygrał: \(viewModel.winner)!")
+                        Text("Wygrał: \(viewModel.winner)!")
                             .font(.title)
                             .foregroundColor(.purple)
                             .bold()
@@ -102,9 +103,6 @@ struct GameView: View {
                 Spacer()
             }
             .padding()
-        }
-        .alert(isPresented: $showTakenAlert) {
-            Alert(title: Text("To pole jest zajęte"))
         }
     }
 }

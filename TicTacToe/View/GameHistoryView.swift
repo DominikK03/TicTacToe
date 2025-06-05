@@ -26,6 +26,17 @@ struct GameHistoryView: View {
                             .foregroundColor(.purple)
                     }
                     Spacer()
+                    Menu {
+                        Button(role: .destructive, action: {
+                            viewModel.deleteAllGames()
+                        }) {
+                            Label("Usuń wszystkie gry", systemImage: "trash")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                            .font(.title2)
+                            .foregroundColor(.purple)
+                    }
                 }
                 .padding(.horizontal)
                 Text("Historia Gier")

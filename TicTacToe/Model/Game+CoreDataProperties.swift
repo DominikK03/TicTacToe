@@ -2,7 +2,7 @@
 //  Game+CoreDataProperties.swift
 //  TicTacToe
 //
-//  Created by Dominik on 28/05/2025.
+//  Created by Dominik on 04/06/2025.
 //
 //
 
@@ -16,9 +16,9 @@ extension Game {
         return NSFetchRequest<Game>(entityName: "Game")
     }
 
-    @NSManaged public var secondPlayer: String?
     @NSManaged public var firstPlayer: String?
     @NSManaged public var result: String?
+    @NSManaged public var secondPlayer: String?
 
 }
 

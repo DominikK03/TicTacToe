@@ -43,51 +43,6 @@ class GameViewModel: ObservableObject {
         }
     }
     
-    func resetGame() {
-        board.initBoard(context: context, game: game)
-        currentPlayer = players[0]
-        gameOver = false
-        winner = ""
-        for player in players {
-            movesQueues[player.name] = FILOQueue<Move>()
-        }
-    }
-    
-    private func switchPlayer() {
-        if currentPlayer.name == players[0].name {
-            currentPlayer = players[1]
-        } else {
-            currentPlayer = players[0]
-        }
-    }
-    
-    private func checkWinner() {
-        let winningPatterns: [[(Int, Int)]] = [
-            [(0,0),(0,1),(0,2)], [(1,0),(1,1),(1,2)], [(2,0),(2,1),(2,2)], // Rows
-            [(0,0),(1,0),(2,0)], [(0,1),(1,1),(2,1)], [(0,2),(1,2),(2,2)], // Columns
-            [(0,0),(1,1),(2,2)], [(0,2),(1,1),(2,0)] // Diagonals
-        ]
-        for pattern in winningPatterns {
-            let symbols = pattern.map { board.board[$0.0][$0.1].player ?? "" }
-            if symbols[0] != "" && symbols.allSatisfy({ $0 == symbols[0] }) {
-                winner = symbols[0]
-                gameOver = true
-                // Save result in Core Data
-                if let winningPlayer = players.first(where: { $0.chosenSymbol.rawValue == winner }) {
-                    game.result = "Player \(winningPlayer.name) wins"
-                    do { try context.save() } catch { print("Failed to save game result: \(error)") }
-                }
-                return
-            }
-        }
-        if board.board.flatMap({ $0 }).allSatisfy({ ($0.player ?? "") != "" }) {
-            gameOver = true
-            winner = "Remis"
-            game.result = "Remis"
-            do { try context.save() } catch { print("Failed to save game result: \(error)") }
-        }
-    }
-    
     func saveMoveInDatabase(move: Move) {
         do {
             try context.save()
@@ -108,4 +63,33 @@ class GameViewModel: ObservableObject {
         let emptyField = Move(context: context, row: Int16(row), col: Int16(col), player: "", toGame: game)
         board.board[row][col] = emptyField
     }
+    
+    private func switchPlayer() {
+        if currentPlayer.name == players[0].name {
+            currentPlayer = players[1]
+        } else {
+            currentPlayer = players[0]
+        }
+    }
+    
+    private func checkWinner() {
+        let winningPatterns: [[(Int, Int)]] = [
+            [(0,0),(0,1),(0,2)], [(1,0),(1,1),(1,2)], [(2,0),(2,1),(2,2)], // Rows
+            [(0,0),(1,0),(2,0)], [(0,1),(1,1),(2,1)], [(0,2),(1,2),(2,2)], // Columns
+            [(0,0),(1,1),(2,2)], [(0,2),(1,1),(2,0)] // Diagonals
+        ]
+        for pattern in winningPatterns {
+            let symbols = pattern.map { board.board[$0.0][$0.1].player ?? "" }
+            if symbols[0] != "" && symbols.allSatisfy({ $0 == symbols[0] }) {
+                if let winningPlayer = players.first(where: { $0.chosenSymbol.rawValue == symbols[0] }) {
+                    winner = winningPlayer.name
+                    gameOver = true
+                    game.result = "Wygrał gracz \(winningPlayer.name) (\(winningPlayer.chosenSymbol))"
+                    do { try context.save() } catch { print("Failed to save game result: \(error)") }
+                }
+                return
+            }
+        }
+    }
+  
 }

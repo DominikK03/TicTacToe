@@ -45,7 +45,6 @@ struct PlayerNamesView: View {
                 Spacer()
                 
                 VStack(spacing: 30) {
-                    // Gracz 1
                     VStack(spacing: 15) {
                         CustomTextField(text: $player1Name, placeholder: "Gracz 1", icon: "person.fill")
                             .focused($focusedField, equals: .player1)
@@ -61,7 +60,6 @@ struct PlayerNamesView: View {
                             SymbolPicker(selectedSymbol: $player1Symbol, oppositeSymbol: $player2Symbol)
                         }
                     }
-                    // Gracz 2
                     VStack(spacing: 15) {
                         CustomTextField(text: $player2Name, placeholder: "Gracz 2", icon: "person.fill")
                             .focused($focusedField, equals: .player2)
@@ -74,6 +72,12 @@ struct PlayerNamesView: View {
                             SymbolPicker(selectedSymbol: $player2Symbol, oppositeSymbol: $player1Symbol)
                         }
                     }
+                    if !player1Name.isEmpty && !player2Name.isEmpty && player1Name == player2Name {
+                                            Text("Nazwy graczy nie mogą być takie same!")
+                                                .foregroundColor(.red)
+                                                .font(.caption)
+                                                .fontWeight(.bold)
+                                        }
                 }
                 .padding(.horizontal, 20)
                 
@@ -108,7 +112,7 @@ struct PlayerNamesView: View {
     }
     
     private var playersReady: Bool {
-        !player1Name.isEmpty && !player2Name.isEmpty
+        !player1Name.isEmpty && !player2Name.isEmpty && player1Name != player2Name
     }
 }
 
@@ -122,7 +126,7 @@ struct SymbolPicker: View {
                 selectedSymbol = Symbol.CROSS
                 oppositeSymbol = Symbol.CIRCLE
             }) {
-                Text("X")
+                Text(Symbol.CROSS.rawValue)
                     .font(.system(size: 24, weight: .bold))
                     .frame(width: 40, height: 40)
                     .background(selectedSymbol == Symbol.CROSS ? Color.blue.opacity(0.3) : Color.gray.opacity(0.1))
@@ -138,7 +142,7 @@ struct SymbolPicker: View {
                 selectedSymbol = Symbol.CIRCLE
                 oppositeSymbol = Symbol.CROSS
             }) {
-                Text("O")
+                Text(Symbol.CIRCLE.rawValue)
                     .font(.system(size: 24, weight: .bold))
                     .frame(width: 40, height: 40)
                     .background(selectedSymbol == Symbol.CIRCLE ? Color.purple.opacity(0.3) : Color.gray.opacity(0.1))

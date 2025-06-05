@@ -30,7 +30,6 @@ struct PlayedGameView: View {
                         endPoint: .trailing
                     ))
                     .shadow(color: .gray.opacity(0.3), radius: 5, x: 0, y: 5)
-                // Board
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 3), spacing: 15) {
                     ForEach(0..<9, id: \ .self) { index in
                         let row = index / 3
@@ -51,7 +50,6 @@ struct PlayedGameView: View {
                     }
                 }
                 .padding(.horizontal, 20)
-                // Slider
                 if viewModel.moves.count > 0 {
                     VStack {
                         Slider(value: Binding(
@@ -64,6 +62,28 @@ struct PlayedGameView: View {
                     }
                     .padding(.horizontal)
                 }
+                HStack {
+                    Button(action: {
+                        if moveIndex > 0 {
+                            moveIndex -= 1
+                        }
+                    }) {
+                        Image(systemName: "arrow.left")
+                            .font(.title2)
+                            .foregroundColor(.purple)
+                    }
+                    Spacer()
+                    Button(action: {
+                        if moveIndex < viewModel.moves.count {
+                            moveIndex += 1
+                        }
+                    }) {
+                        Image(systemName: "arrow.right")
+                            .font(.title2)
+                            .foregroundColor(.purple)
+                    }
+                }
+                .padding(.horizontal)
                 Spacer()
             }
             .padding()

@@ -58,7 +58,6 @@ struct ContentView: View {
                         currentScreen = .mainMenu
                     },
                     onRestart: {
-                        // Create new game and board
                         let newGame = Game(context: viewContext, firstPlayer: players[0].name, secondPlayer: players[1].name)
                         var newBoard = Board(board: [])
                         newBoard.initBoard(context: viewContext, game: newGame)

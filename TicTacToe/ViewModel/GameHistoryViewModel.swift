@@ -45,4 +45,17 @@ class GameHistoryViewModel: ObservableObject {
             print("Failed to delete game: \(error)")
         }
     }
+
+    func deleteAllGames() {
+        let request: NSFetchRequest<NSFetchRequestResult> = Game.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
+        
+        do {
+            try context.execute(deleteRequest)
+            try context.save()
+            fetchGames()
+        } catch {
+            print("Failed to delete all games: \(error)")
+        }
+    }
 } 

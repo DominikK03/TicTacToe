@@ -12,7 +12,6 @@ struct TicTacToeApp: App {
     @Environment(\.managedObjectContext) var managedObjectContext
     let persistenceController = PersistenceController.shared
 
-
     var body: some Scene {
         WindowGroup {
             ContentView()

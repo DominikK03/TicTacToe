@@ -20,5 +20,6 @@ public class Move: NSManagedObject {
         self.row = row
         self.player = player
         self.toGame = toGame
+        self.timestamp = Date()
     }
 }
